@@ -1,0 +1,28 @@
+<head>
+  <title>Article Scraper</title>
+  <link rel="icon" sizes="16x16 32x32" href="/favicon.ico?v=3">
+</head>
+
+<body>
+  {{> dashboard}}
+</body>
+
+<template name="dashboard">
+  <form class="articles-list {{#if ready}}ready{{/if}}">
+  	<textarea name="urls" placeholder="Paste your links here or upload a bulk file"></textarea>
+  	<input type="file" id="urls-file" name="urls-file">
+  	<label for="urls-file" class="button" title="Upload bulk file"><i class="fa fa-upload"></i></label>
+  	<button type="submit" class="button" title="Let's roll!"><i class="fa fa-play"></i></button>
+  </form>  
+
+  <div class="progress {{#if progress.active}}active{{/if}}">
+  	<div class="progress-bar" style=" -webkit-transform: translate({{progress.percentage}}%); transform: translate({{progress.percentage}}%);"></div>
+  	<p class="progress-percentage {{#if progress.active}}active{{/if}}">{{completed}}/{{count}}</p>
+  </div>
+
+  <div class="result {{#if progress.finish}}active{{/if}}">
+  	<button name="save" class="button" title="Download file"><i class="fa fa-download"></i></button>
+  	<button name="reset" class="button" title="Start over"><i class="fa fa-undo"></i></button>
+  	<p>{{result}}</p>
+  </div>  
+</template>
