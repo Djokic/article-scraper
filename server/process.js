@@ -27,7 +27,7 @@ Meteor.methods({
 					if(articles.completed < articles.count) {
 						if(articles.started < articles.count) next();
 					} else {
-						articles.result = articles.result.replace(/\s+/gi, ' ').replace(/([^A-Z\s])([A-Z])/g, '$1 $2');
+						articles.result = articles.result.replace(/&nbsp;+|\s+/gi, ' ').replace(/([^A-Z\s])([A-Z])/g, '$1 $2');
 						Scrapes.upsert({"_id": sessionId }, {$set: {"result": articles.result}});
 					}	
 				}));

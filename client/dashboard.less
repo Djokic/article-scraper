@@ -74,6 +74,15 @@ input[name="urls-file"] {
 	}
 }
 
+.button--secondary {
+	background: #f7f7f7;
+	color: #16a085;
+
+	&:hover {
+		background: #eee;
+	}
+}
+
 .articles-list {
 	.button {
 		.transform(translateY(6vw));
@@ -87,6 +96,10 @@ input[name="urls-file"] {
 	&.ready {
 		.button {
 			.transform(translateY(0));
+
+			&[for="urls-file"] {
+				.button--secondary();
+			}
 
 			&[type="submit"] {
 				opacity: 1;
@@ -165,6 +178,7 @@ input[name="urls-file"] {
 	}
 
 	.button[name="reset"] {
+		.button--secondary();
 		.transform(translateY(-6vw));
 	}
 }

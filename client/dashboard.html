@@ -10,7 +10,7 @@
 <template name="dashboard">
   <form class="articles-list {{#if ready}}ready{{/if}}">
   	<textarea name="urls" placeholder="Paste your links here or upload a bulk file"></textarea>
-  	<input type="file" id="urls-file" name="urls-file">
+  	<input type="file" id="urls-file" name="urls-file" accept="text/plain">
   	<label for="urls-file" class="button" title="Upload bulk file"><i class="fa fa-upload"></i></label>
   	<button type="submit" class="button" title="Let's roll!"><i class="fa fa-play"></i></button>
   </form>  

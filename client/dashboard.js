@@ -28,7 +28,7 @@ Template.dashboard.helpers({
   },
   "ready": function() {
     var urls = Session.get("urls");
-    return (!!urls[0] &&  urls[0]!== "") ? true : false;
+    return (!!urls && urls.length &&  urls[0]!== "") ? true : false;
   },
   "progress":function() {
     var count = Session.get("count");
@@ -55,10 +55,13 @@ Template.dashboard.events({
   'submit .articles-list': function (event) {
     event.preventDefault();
     $('.progress').addClass('active');
-    Meteor.call('processArticles', Session.get("urls"), sessionId);
-
-    fileName =  $('.articles-list [type="file"]')[0].value.replace(/^.*[\\\/]/, '');
-    fileName = "SCRAPE - " + (fileName !== "" ? fileName : Date.now());
+    var urls = Session.get("urls");
+    var regex = /^(http|https)\:\/\//i;
+    urls = urls.filter(function(url) {
+      return regex.test(url);
+    });
+    Session.set("urls", urls);
+    Meteor.call('processArticles', urls, sessionId);    
   },
   'change, paste, keyup [name="urls"]': function(event) {
     var urls = event.target.value.trim().split("\n");
@@ -66,6 +69,7 @@ Template.dashboard.events({
   },
   'change [type="file"]': function(event) {
     var file = event.target.files[0];
+
     var reader = new FileReader();
     reader.onload = function(e) {
       $('.articles-list textarea').val(e.target.result).keyup();
@@ -73,7 +77,13 @@ Template.dashboard.events({
     reader.onerror = function(error){    
       alert(error);
     }
-    reader.readAsText(file);
+
+    if(file.name.substr((~-file.name.lastIndexOf(".") >>> 0) + 2) === "txt") {
+      reader.readAsText(file);
+      fileName =  file.name.replace(/^.*[\\\/]/, '');
+      fileName = "SCRAPE - " + (fileName !== "" ? fileName : Date.now());
+    }
+    
   },
   'click [name="save"]': function() {
     var result = Session.get("result");
