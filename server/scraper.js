@@ -29,7 +29,7 @@ Meteor.methods({
 					} else {
 						articles.result = articles.result.replace(/&nbsp;+|\s+/gi, ' ').replace(/([^A-Z\s])([A-Z])/g, '$1 $2');
 						Scrapes.upsert({"_id": sessionId }, {$set: {"result": articles.result}});
-					}	
+					}
 				}));
 			}
 		}
@@ -42,5 +42,9 @@ Meteor.methods({
 		for(var i = 0; i < parallelRequests; i++) {
 			next();
 		}
+	},
+	deleteResults: function(sessionId) {
+		Scrapes.remove({"_id": sessionId});
+		Analyzes.remove({"_id": sessionId});		
 	}
 });

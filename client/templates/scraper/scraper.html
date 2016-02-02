@@ -1,0 +1,22 @@
+<template name="scraper">
+  <div class="scraper">
+    
+    <form class="scraper__list {{#if ready}}ready{{/if}}">
+    	<textarea name="urls" class="scraper__list__input" placeholder="Paste your links here or upload a bulk file"></textarea>
+    	<input type="file" id="urls-file" name="urls-file" accept="text/plain">
+    	<label for="urls-file" class="scraper__list__upload" title="Upload bulk file"><i class="fa fa-upload"></i></label>
+    	<button type="submit" class="scraper__list__process" title="Let's roll!"><i class="fa fa-play"></i></button>
+    </form>  
+
+    <div class="scraper__progress {{#if progress.active}}active{{/if}}">
+    	<div class="scraper__progress__bar" style=" -webkit-transform: translate({{progress.percentage}}%); transform: translate({{progress.percentage}}%);"></div>
+    	<p class="scraper__progress__percentage {{#if progress.active}}active{{/if}}">{{completed}}/{{count}}</p>
+    </div>
+
+    <div class="scraper__result {{#if progress.finish}}active{{/if}}">
+    	<button name="save" class="scraper__result__save" title="Download file"><i class="fa fa-download"></i></button>
+    	<button name="reset" class="scraper__result__reset" title="Start over"><i class="fa fa-undo"></i></button>
+    	<p>{{result}}</p>
+    </div>
+  </div>  
+</template>

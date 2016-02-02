@@ -1,0 +1,49 @@
+@import "_config";
+
+html, body {
+	height: 100%;
+}
+
+body {
+	position: relative;
+	overflow: hidden;
+	font-family: Georgia, serif;
+	font-size: 1.25em;
+	line-height: 1.45;
+	display: flex;
+  	flex-direction: column;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	color: @color-text-strong;
+}
+
+header {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	flex: 0 0 auto;
+	z-index: 11;
+}
+
+main {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	flex: 1 1 auto;
+}
+
+textarea {
+	resize: none;
+	font-family: Georgia, serif;
+	padding: 1em;
+	outline: none;
+}
+
+.fa, .fa:before {
+	pointer-events: none;
+}
