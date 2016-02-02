@@ -1,0 +1,54 @@
+@import "_config";
+
+.button-fab() {
+	background: @color-accent;
+	border: none;
+	color: #fff;
+	padding: .9em;
+	outline: none;
+	position: fixed;
+	bottom: 5em;
+	right: 5em;
+	bottom: 5vw;
+	right: 5vw;
+	line-height: 1em;
+	border-radius: 50%;
+	cursor: pointer;
+	box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
+	transition: .3s ease;
+
+	i:before {
+		width: 1em;
+		height: 1em;
+		display: inline-block;
+		transition: .2s ease;
+	}
+
+	&:hover {
+		background: darken(@color-accent, 10%);
+	}
+}
+
+.button-fab--inverse() {
+	background: @color-background-weak;
+	color: @color-accent;
+
+	&:hover {
+		background: darken(@color-background-weak, 5%);
+	}
+}
+
+.button-icon() {
+	display: inline-block;
+	background: transparent;
+	border: none;
+	outline: none;
+	color: darken(@color-background-weak, 30%);
+	cursor: pointer;
+	padding: 0;
+	vertical-align: middle;
+
+	&:hover {
+		color: darken(@color-background-weak, 60%)
+	}
+}

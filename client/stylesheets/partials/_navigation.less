@@ -1,0 +1,41 @@
+@import "_config";
+
+nav {
+  display: block;
+  width: 100%;
+  background: @color-primary;
+  font-family: @font-sans;
+  font-weight: 400;
+  overflow: hidden;
+
+  a {
+    display: inline-block;
+    float: left;
+    font-size: 1.9vh;
+    line-height: 6vh;
+    padding: 1.5vh 4vh;
+    text-decoration: none;
+    color: #fff;
+    background: @color-primary;
+    transition: .2s ease;
+    vertical-align: middle;
+    min-width: 15%;
+    text-align: center;
+
+    &:hover {
+      background: darken(@color-primary, 5%);
+    }
+
+    &.active {
+      background: @color-secondary;
+    }
+
+    i:before {
+      font-size: 1.5em;
+      margin-right: .5rem;
+      padding-top: .5rem;
+      vertical-align: sub;
+      pointer-events: none;
+    }
+  }
+}

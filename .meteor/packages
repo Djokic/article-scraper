@@ -26,6 +26,8 @@ meteorhacks:npm
 npm-container
 random
 pfafman:filesaver
-less
 fortawesome:fontawesome
 percolate:synced-cron
+flemay:less-autoprefixer
+iron:router
+iron:layout
