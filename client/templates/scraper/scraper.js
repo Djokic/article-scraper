@@ -1,39 +1,51 @@
 sessionId = Random.id();
 fileName = false;
 
+Template.scraper.onCreated(function() {
+  this.urls = new ReactiveVar;
+  this.result = new ReactiveVar;
+  this.count = new ReactiveVar;
+  this.completed = new ReactiveVar;
+
+  this.reset = function() {
+    this.urls.set([""]);
+    this.result.set("");
+    this.count.set(0);
+    this.completed.set(0);
+  }
+
+  this.reset();
+});
+
 Template.scraper.rendered = function() {
-  Session.set("scraper-urls", [""]);
-  Session.set("scraper-result", "");
-  Session.set("scraper-count", 0);
-  Session.set("scraper-completed", 0);
+  var _this = Template.instance();
 
   var scrapes = Scrapes.find({"_id": sessionId});
   scrapes.observe({
     added: function (document) {
-      Session.set("scraper-result", document.result);
-      Session.set("scraper-count", document.count);
-      Session.set("scraper-completed", document.completed);
+      _this.result.set(document.result);
+      _this.count.set(document.count);
+      _this.completed.set(document.completed);
     },
     changed: function (newDocument, oldDocument) {
-      Session.set("scraper-result", newDocument.result);
-      Session.set("scraper-count", newDocument.count);
-      Session.set("scraper-completed", newDocument.completed);
+      _this.result.set(newDocument.result);
+      _this.count.set(newDocument.count);
+      _this.completed.set(newDocument.completed);
     }
   });
 }
 
 Template.scraper.helpers({
   "urls": function() {
-    return Session.get("scraper-urls");
+    return Template.instance().urls.get();
   },
   "ready": function() {
-    var urls = Session.get("scraper-urls");
+    var urls = Template.instance().urls.get();
     return (!!urls && urls.length &&  urls[0]!== "") ? true : false;
   },
   "progress":function() {
-    var count = Session.get("scraper-count");
-    var completed = Session.get("scraper-completed");
-    var result = Session.get("scraper-result");
+    var count = Template.instance().count.get();
+    var completed = Template.instance().completed.get();
     return {
       active: (count  > 0 && completed < count) ? true : false,
       percentage: -100 + Math.floor(completed/count * 100),
@@ -41,13 +53,13 @@ Template.scraper.helpers({
     };
   },
   "result": function() {
-    return Session.get("scraper-result");
+    return Template.instance().result.get();
   },
   "count": function() {
-    return Session.get("scraper-count");
+    return Template.instance().count.get();
   },
   "completed": function() {
-    return Session.get("scraper-completed");
+    return Template.instance().completed.get();
   }
 });
 
@@ -55,17 +67,18 @@ Template.scraper.events({
   'submit .scraper__list': function (event) {
     event.preventDefault();
     $('.scraper__progress').addClass('active');
-    var urls = Session.get("scraper-urls");
     var regex = /^(http|https)\:\/\//i;
-    urls = urls.filter(function(url) {
-      return regex.test(url);
-    });
-    Session.set("scraper-urls", urls);
-    Meteor.call('processArticles', urls, sessionId);
+    Template.instance().urls.set(
+      Template.instance().urls.get().filter(function(url) {
+        return regex.test(url);
+      })
+    );
+    Meteor.call('processArticles', Template.instance().urls.get(), sessionId);
   },
   'change, paste, keyup [name="urls"]': function(event) {
-    var urls = event.target.value.trim().split("\n");
-    Session.set("scraper-urls", urls);
+    Template.instance().urls.set(
+      event.target.value.trim().split("\n")
+    );
   },
   'change [type="file"]': function(event) {
     var file = event.target.files[0];
@@ -85,20 +98,15 @@ Template.scraper.events({
     }
 
   },
-  'click [name="save"]': function() {
-    var result = Session.get("scraper-result");
-    if(result.length) {
-      var blob = new Blob([result], {type: "text/plain;charset=utf-8"});
+  'click [name="save"]': function(event) {
+    if(Template.instance().result.get().length) {
+      var blob = new Blob([Template.instance().result.get()], {type: "text/plain;charset=utf-8"});
       saveAs(blob, fileName);
     }
   },
-  'click [name="reset"]': function() {
-    Session.set("scraper-urls", [""]);
-    Session.set("scraper-result", "");
-    Session.set("scraper-count", 0);
-    Session.set("scraper-completed", 0);
+  'click [name="reset"]': function(event) {
+    Template.instance().reset();
     $(".scraper__list")[0].reset();
     Meteor.call('deleteResults', sessionId);
   }
-
 });
