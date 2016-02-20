@@ -1,0 +1,19 @@
+{
+  "name": "article-scraper",
+  "description": "",
+  "scripts": {
+  },
+  "env": {
+    "ROOT_URL": {
+      "required": true
+    }
+  },
+  "addons": [
+    "mongolab"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/AdmitHub/meteor-buildpack-horse.git"
+    }
+  ]
+}
