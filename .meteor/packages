@@ -31,3 +31,4 @@ percolate:synced-cron
 flemay:less-autoprefixer
 iron:router
 iron:layout
+reactive-var
