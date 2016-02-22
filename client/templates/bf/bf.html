@@ -1,0 +1,65 @@
+<template name="bf">
+  <div class="bf">
+    <form class="bf__text {{#if ready}}ready{{/if}}">
+    	<textarea name="urls" class="bf__text__input" placeholder="Paste your text here or upload file for analysis"></textarea>
+    	<input type="file" id="urls-file" name="urls-file" accept="text/plain">
+    	<label for="urls-file" class="bf__text__upload" title="Upload text file"><i class="fa fa-upload"></i></label>
+    	<button type="submit" class="bf__text__process" title="Let's roll!"><i class="fa fa-play"></i></button>
+    </form>
+
+    <div class="bf__progress {{#if progress.active}}active{{/if}}">
+    	<div class="bf__progress__bar" style=" -webkit-transform: translate({{progress.percentage}}%); transform: translate({{progress.percentage}}%);"></div>
+    	<p class="bf__progress__percentage {{#if progress.active}}active{{/if}}">{{completed}}/{{count}}</p>
+    </div>
+
+    <div class="bf__result {{#if progress.finish}}active{{/if}}">
+    	<button name="reset" class="bf__result__reset" title="Start over"><i class="fa fa-undo"></i></button>
+      <div class="bf__result__data">
+        <table>
+          {{#each result}}
+          <tr>
+            <td>
+              <strong>{{name}}</strong>
+            </td>
+            <td>
+              {{number}}
+            </td>
+            <td>
+              {{percent}}
+            </td>
+          </tr>
+          {{/each}}
+        </table>
+      </div>
+    </div>
+
+    <button class="bf__toggle-categories"><i class="fa fa-cog"></i></button>
+    <div class="bf__categories">
+      <div class="bf__categories__list">
+        <h2>Categories</h2>
+        <ul>
+          {{#each categories}}
+          <li data-id="{{_id}}">
+            <span class="bf__categories__name">{{name}}</span>
+            <button type="button" class="bf__categories__delete"><i class="fa fa-trash-o"></i></button>
+          </li>
+          {{/each}}
+
+          <li>
+            <form class="bf__categories__new">
+              <input type="text" class="bf__categories__new__name" placeholder="New category" required>
+              <button type="submit" class="bf__categories__new__save"><i class="fa fa-plus-square-o"></i></button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <div class="bf__category__data">
+        {{#if category._id}}
+        <h2 class="bf__category__name">{{category.name}}</h2>
+        <textarea name="words" class="bf__category__words" placeholder="Category words" value="{{category.words}}"></textarea>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+</template>
