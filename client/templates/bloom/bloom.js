@@ -6,7 +6,7 @@ Template.bloom.rendered = function() {
   Session.set("bloom-count", 0);
   Session.set("bloom-completed", 0);
 
-  var categories = Categories.find({}, {sort: {"createdAt": -1}});
+  var categories = Categories.find({"type": "Bloom"}, {sort: {"createdAt": -1}});
   categories.observe({
     added: function (category) {
       var categories = Session.get("bloom-categories");

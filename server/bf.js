@@ -1,15 +1,15 @@
 Meteor.methods({
-	createBloomCategory: function(categoryName) {
-		Categories.upsert({"name": categoryName }, {$set: {"name": categoryName, "type": "Bloom"}});
+	createBfCategory: function(categoryName) {
+		Categories.upsert({"name": categoryName }, {$set: {"name": categoryName, "type": "Bf"}});
 	},
-	deleteBloomCategory: function(categoryId) {
+	deleteBfCategory: function(categoryId) {
 		Categories.remove({"_id": categoryId});
 	},
-	updateBloomCategory: function(categoryId, categoryWords) {
+	updateBfCategory: function(categoryId, categoryWords) {
 		Categories.update({"_id": categoryId }, {$set: { "words": categoryWords }});
 	},
-	analyzeBloom: function(text, sessionId) {
-		var categories = Categories.find({"type": "Bloom"}).fetch();
+	analyzeBf: function(text, sessionId) {
+		var categories = Categories.find({"type": "Bf"}).fetch();
 
 		text = text.toLowerCase().replace(/([a-zA-z'])([^a-zA-Z'])|([^a-zA-Z'])([a-zA-z'])/gi, '$1 $2').replace(/\s\s+/g, ' ');
 
@@ -17,7 +17,7 @@ Meteor.methods({
 
 		var now = new Date();
 
-		Analyzes.upsert({"_id": sessionId }, {$set: {"createdAt": now, "type": "Bloom", "count": categories.length, "completed": 0}});
+		Analyzes.upsert({"_id": sessionId }, {$set: {"createdAt": now, "type": "Bf", "count": categories.length, "completed": 0}});
 
 		categories.forEach(function (category, index) {
 			var counterWords = 0;
@@ -35,9 +35,14 @@ Meteor.methods({
 			Analyzes.upsert({"_id": sessionId }, {$set: {"completed": index + 1}});
 			analysis.push({
 				name: category.name,
-				number: counterOccurence,
-				percent: Math.round((counterWords / words.length) * 10000) / 100 + "%"
+				number: counterOccurence
 			});
+		});
+
+		var analysisTotalWords = analysis.map(function(cat) { return cat.number; }).reduce(function(a, b) { return a + b});
+
+		analysis.forEach(function(an) {
+			an.percent = Math.round((an.number / analysisTotalWords) * 10000) / 100 + "%"
 		});
 
 		function numberOfOccurrences(string, substring) {
